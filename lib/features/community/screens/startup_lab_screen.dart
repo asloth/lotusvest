@@ -50,7 +50,7 @@ class _StartupLabScreenState extends State<StartupLabScreen>
               ),
             ),
             Text(
-              'Comunidad de Impacto',
+              'Descubre Comunidades de Impacto',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,

@@ -31,9 +31,26 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         backgroundColor: _surfaceColor,
         foregroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          'Tus Comunidades de Impacto',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        title: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Tus Comunidades de Impacto',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              'Apoyando a las comunidades que amas',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: Color(0xFFA78BFA),
+              ),
+            ),
+          ],
         ),
       ),
       body: RefreshIndicator(
