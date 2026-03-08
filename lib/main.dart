@@ -1,403 +1,89 @@
 import 'package:flutter/material.dart';
 import 'features/community/screens/startup_lab_screen.dart';
+import 'widgets/bottom_nav_bar.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const LotusVestApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class LotusVestApp extends StatelessWidget {
+  const LotusVestApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'LotusVest',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF6B4EFF),
-          brightness: Brightness.light,
+      theme: ThemeData.dark().copyWith(
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFFA78BFA),
+          surface: Color(0xFF1E1E1E),
         ),
-        useMaterial3: true,
-        fontFamily: 'Roboto',
+        scaffoldBackgroundColor: const Color(0xFF121212),
       ),
-      home: const OnboardingScreen(),
+      home: const MainShell(),
     );
   }
 }
 
-class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+class MainShell extends StatefulWidget {
+  const MainShell({super.key});
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  State<MainShell> createState() => _MainShellState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
-
-  final List<CarouselItem> _carouselItems = [
-    CarouselItem(
-      title: 'Bienvenida',
-      description: 'Invierte en el futuro del liderazgo femenino',
-      color: const Color(0xFF6B4EFF),
-      icon: Icons.rocket_launch,
-    ),
-    CarouselItem(
-      title: 'Descubre Startups',
-      description: 'Encuentra proyectos alineados con tus valores',
-      color: const Color(0xFF4ECDC4),
-      icon: Icons.explore,
-    ),
-    CarouselItem(
-      title: 'Únete a la Comunidad',
-      description: 'Conecta con fundadoras y profesionales del sector',
-      color: const Color(0xFFFF6B6B),
-      icon: Icons.people,
-    ),
-    CarouselItem(
-      title: 'Genera Impacto',
-      description: 'Tu apoyo transforma ideas en realidad',
-      color: const Color(0xFFFFBE0B),
-      icon: Icons.favorite,
-    ),
-  ];
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  void _navigateToHome() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8F5FF),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.network(
-                    'https://via.placeholder.com/40x40/6B4EFF/FFFFFF?text=LV',
-                    width: 40,
-                    height: 40,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF6B4EFF),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'LV',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: _navigateToHome,
-                    child: const Text(
-                      'Omitir',
-                      style: TextStyle(
-                        color: Color(0xFF6B4EFF),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                itemCount: _carouselItems.length,
-                itemBuilder: (context, index) {
-                  final item = _carouselItems[index];
-                  return Container(
-                    margin: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: item.color.withOpacity(0.2),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: item.color.withOpacity(0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(item.icon, size: 60, color: item.color),
-                        ),
-                        const SizedBox(height: 40),
-                        Text(
-                          item.title,
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: item.color,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 32),
-                          child: Text(
-                            item.description,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[600],
-                              height: 1.5,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  _carouselItems.length,
-                  (index) => GestureDetector(
-                    onTap: () {
-                      _pageController.animateToPage(
-                        index,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: _currentPage == index ? 32 : 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: _currentPage == index
-                            ? _carouselItems[index].color
-                            : Colors.grey.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_currentPage < _carouselItems.length - 1) {
-                      _pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    } else {
-                      _navigateToHome();
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _carouselItems[_currentPage].color,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    _currentPage < _carouselItems.length - 1
-                        ? 'Siguiente'
-                        : 'Comenzar',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class MainNavigationScreen extends StatefulWidget {
-  const MainNavigationScreen({super.key});
-
-  @override
-  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
-}
-
-class _MainNavigationScreenState extends State<MainNavigationScreen> {
+class _MainShellState extends State<MainShell> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const _HomeScreen(),
-    const _DiscoverScreen(),
-    const _CreateScreen(),
-    const StartupLabScreen(),
-    const _ProfileScreen(),
+  // Placeholder pages — replace each with real screen widgets
+  static const List<Widget> _pages = [
+    _PlaceholderPage(label: 'Home'),
+    _PlaceholderPage(label: 'Discover'),
+    _PlaceholderPage(label: 'Community'),
+    _PlaceholderPage(label: 'Profile'),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_currentIndex],
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 20,
-              offset: const Offset(0, -4),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(0, Icons.home_outlined, Icons.home, 'Home'),
-                _buildNavItem(
-                  1,
-                  Icons.compass_calibration_outlined,
-                  Icons.compass_calibration,
-                  'Discover',
-                ),
-                _buildCreateButton(),
-                _buildNavItem(
-                  3,
-                  Icons.groups_outlined,
-                  Icons.groups,
-                  'Community',
-                ),
-                _buildNavItem(4, Icons.person_outline, Icons.person, 'Profile'),
-              ],
-            ),
-          ),
+      backgroundColor: const Color(0xFF121212),
+      body: _pages[_currentIndex],
+      bottomNavigationBar: AppBottomNavBar(
+        currentIndex: _currentIndex,
+        onTap: (index) => setState(() => _currentIndex = index),
+      ),
+      floatingActionButton: SizedBox(
+        width: 64,
+        height: 64,
+        child: FloatingActionButton(
+          onPressed: () {
+            // TODO: open Create screen
+          },
+          backgroundColor: const Color(0xFFA78BFA),
+          shape: const CircleBorder(),
+          elevation: 6,
+          child: const Icon(Icons.add, color: Colors.white, size: 32),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+}
 
-  Widget _buildNavItem(
-    int index,
-    IconData icon,
-    IconData activeIcon,
-    String label,
-  ) {
-    final isSelected = _currentIndex == index;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _currentIndex = index;
-        });
-      },
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? const Color(0xFF6B4EFF).withOpacity(0.1)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              isSelected ? activeIcon : icon,
-              color: isSelected ? const Color(0xFF6B4EFF) : Colors.grey[500],
-              size: 24,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                color: isSelected ? const Color(0xFF6B4EFF) : Colors.grey[500],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+class _PlaceholderPage extends StatelessWidget {
+  final String label;
+  const _PlaceholderPage({required this.label});
 
-  Widget _buildCreateButton() {
-    final isSelected = _currentIndex == 2;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _currentIndex = 2;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF6B4EFF), Color(0xFF9D4EDD)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF6B4EFF).withOpacity(0.4),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Icon(
-          isSelected ? Icons.add : Icons.add,
-          color: Colors.white,
-          size: 28,
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        label,
+        style: const TextStyle(
+          color: Color(0xFFA78BFA),
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
