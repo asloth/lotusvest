@@ -179,7 +179,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed('/signup'),
                     style: TextButton.styleFrom(
                       foregroundColor: _lavender,
                       padding: EdgeInsets.zero,
@@ -206,35 +207,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Logo placeholder — replace with Image.asset('assets/logo.png') when ready
-// ---------------------------------------------------------------------------
 class _LogoPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-            color: const Color(0xFF1E1E1E),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: const Color(0xFFA78BFA), width: 1.5),
-          ),
-          child: const Center(
-            child: Text(
-              'LV',
-              style: TextStyle(
-                color: Color(0xFFA78BFA),
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1,
-              ),
-            ),
-          ),
-        ),
-      ],
+    return Center(
+      child: Image.asset(
+        'assets/icons/app_icon.webp',
+        width: 110,
+        height: 110,
+      ),
     );
   }
 }
