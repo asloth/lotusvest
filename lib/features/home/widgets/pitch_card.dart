@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/pitch_project.dart';
+import '../../community/screens/feed_screen.dart';
 
 class PitchCard extends StatefulWidget {
   final PitchProject project;
@@ -280,7 +281,14 @@ class _PitchCardState extends State<PitchCard> {
           const SizedBox(width: 12),
           Expanded(
             child: OutlinedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FeedScreen(),
+                  ),
+                );
+              },
               icon: const Icon(Icons.groups, size: 18),
               label: const Text('Comunidad'),
               style: OutlinedButton.styleFrom(
