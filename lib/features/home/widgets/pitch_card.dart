@@ -51,7 +51,11 @@ class _PitchCardState extends State<PitchCard> {
             errorBuilder: (_, __, ___) => Container(
               height: 200,
               color: const Color(0xFF2A2A2A),
-              child: const Icon(Icons.image_outlined, color: Colors.white24, size: 48),
+              child: const Icon(
+                Icons.image_outlined,
+                color: Colors.white24,
+                size: 48,
+              ),
             ),
           ),
         ),
@@ -65,7 +69,11 @@ class _PitchCardState extends State<PitchCard> {
                 color: Colors.black.withOpacity(0.55),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.play_arrow, color: Colors.white, size: 34),
+              child: const Icon(
+                Icons.play_arrow,
+                color: Colors.white,
+                size: 34,
+              ),
             ),
           ),
         ),
@@ -152,7 +160,11 @@ class _PitchCardState extends State<PitchCard> {
         widget.project.description,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.5),
+        style: const TextStyle(
+          color: Colors.white70,
+          fontSize: 14,
+          height: 1.5,
+        ),
       ),
     );
   }
@@ -168,7 +180,10 @@ class _PitchCardState extends State<PitchCard> {
               (tech) => Chip(
                 label: Text(tech),
                 backgroundColor: const Color(0xFF2A2A2A),
-                labelStyle: const TextStyle(color: Colors.white70, fontSize: 12),
+                labelStyle: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 12,
+                ),
                 padding: EdgeInsets.zero,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 visualDensity: VisualDensity.compact,
@@ -200,7 +215,7 @@ class _PitchCardState extends State<PitchCard> {
                 ),
               ),
               Text(
-                ' of \$$goal',
+                ' de \$$goal',
                 style: const TextStyle(color: Colors.white54, fontSize: 14),
               ),
             ],
@@ -221,14 +236,18 @@ class _PitchCardState extends State<PitchCard> {
               const Icon(Icons.people_outline, color: Colors.white38, size: 16),
               const SizedBox(width: 4),
               Text(
-                '${widget.project.backersCount} backers',
+                '${widget.project.backersCount} inversores',
                 style: const TextStyle(color: Colors.white54, fontSize: 13),
               ),
               const Spacer(),
-              const Icon(Icons.access_time_outlined, color: Colors.white38, size: 16),
+              const Icon(
+                Icons.access_time_outlined,
+                color: Colors.white38,
+                size: 16,
+              ),
               const SizedBox(width: 4),
               Text(
-                '${widget.project.daysLeft} days left',
+                '${widget.project.daysLeft} días restantes',
                 style: const TextStyle(color: Colors.white54, fontSize: 13),
               ),
             ],
@@ -244,11 +263,10 @@ class _PitchCardState extends State<PitchCard> {
       child: Row(
         children: [
           Expanded(
-            flex: 3,
             child: ElevatedButton.icon(
               onPressed: () {},
               icon: const Icon(Icons.favorite, size: 18),
-              label: const Text('Donate'),
+              label: const Text('Donar'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: _primaryColor,
                 foregroundColor: Colors.white,
@@ -261,9 +279,10 @@ class _PitchCardState extends State<PitchCard> {
           ),
           const SizedBox(width: 12),
           Expanded(
-            flex: 2,
-            child: OutlinedButton(
+            child: OutlinedButton.icon(
               onPressed: () {},
+              icon: const Icon(Icons.groups, size: 18),
+              label: const Text('Comunidad'),
               style: OutlinedButton.styleFrom(
                 foregroundColor: _primaryColor,
                 side: const BorderSide(color: _primaryColor),
@@ -272,7 +291,6 @@ class _PitchCardState extends State<PitchCard> {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              child: const Text('Join'),
             ),
           ),
         ],
