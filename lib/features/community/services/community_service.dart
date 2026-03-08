@@ -3,7 +3,7 @@ import '../models/models.dart';
 class CommunityService {
   // Mock data for demonstration
 
-  static List<Post> getMockPosts() {
+  static List<Post> getMockPostsByStartup(String startupId) {
     return [
       Post(
         id: '1',
@@ -32,7 +32,40 @@ class CommunityService {
         likesCount: 32,
         commentsCount: 8,
         createdAt: DateTime.now().subtract(const Duration(days: 1)),
-      ) /*
+      ),
+    ];
+  }
+
+  static List<Post> getMockAllPosts() {
+    return [
+      Post(
+        id: '1',
+        startupId: 'startup1',
+        authorName: 'María González',
+        authorPhotoUrl:
+            'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200',
+        content:
+            '¡Acabamos de cerrar nuestra primera ronda de pruebas beta! 🚀 Más de 100 usuarios probando nuestra plataforma de microcréditos para emprendedoras. Los resultados son increíbles.',
+        imageUrls: [],
+        type: PostType.milestone,
+        likesCount: 45,
+        commentsCount: 12,
+        createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+      ),
+      Post(
+        id: '2',
+        startupId: 'startup1',
+        authorName: 'María González',
+        authorPhotoUrl:
+            'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200',
+        content:
+            'Nuestro equipo trabajando en las nuevas funciones de IA para detección de fraude. ¡El futuro de Fintech es ahora!',
+        imageUrls: ['https://picsum.photos/400/300'],
+        type: PostType.teamPhoto,
+        likesCount: 32,
+        commentsCount: 8,
+        createdAt: DateTime.now().subtract(const Duration(days: 1)),
+      ),
       Post(
         id: '3',
         startupId: 'startup2',
@@ -58,7 +91,7 @@ class CommunityService {
         likesCount: 28,
         commentsCount: 5,
         createdAt: DateTime.now().subtract(const Duration(days: 3)),
-      ),*/,
+      ),
     ];
   }
 

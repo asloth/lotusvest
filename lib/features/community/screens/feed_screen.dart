@@ -12,7 +12,7 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
-  final List<Post> _posts = CommunityService.getMockPosts();
+  final List<Post> _posts = CommunityService.getMockPostsByStartup('startup1');
   final ScrollController _scrollController = ScrollController();
 
   // Theme colors
