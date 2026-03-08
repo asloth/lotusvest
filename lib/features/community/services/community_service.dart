@@ -9,7 +9,8 @@ class CommunityService {
         id: '1',
         startupId: 'startup1',
         authorName: 'María González',
-        authorPhotoUrl: 'https://i.pravatar.cc/150?img=1',
+        authorPhotoUrl:
+            'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200',
         content:
             '¡Acabamos de cerrar nuestra primera ronda de pruebas beta! 🚀 Más de 100 usuarios probando nuestra plataforma de microcréditos para emprendedoras. Los resultados son increíbles.',
         imageUrls: [],
@@ -22,7 +23,8 @@ class CommunityService {
         id: '2',
         startupId: 'startup1',
         authorName: 'María González',
-        authorPhotoUrl: 'https://i.pravatar.cc/150?img=1',
+        authorPhotoUrl:
+            'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200',
         content:
             'Nuestro equipo trabajando en las nuevas funciones de IA para detección de fraude. ¡El futuro de Fintech es ahora!',
         imageUrls: ['https://picsum.photos/400/300'],
@@ -30,7 +32,7 @@ class CommunityService {
         likesCount: 32,
         commentsCount: 8,
         createdAt: DateTime.now().subtract(const Duration(days: 1)),
-      ),
+      ) /*
       Post(
         id: '3',
         startupId: 'startup2',
@@ -56,7 +58,7 @@ class CommunityService {
         likesCount: 28,
         commentsCount: 5,
         createdAt: DateTime.now().subtract(const Duration(days: 3)),
-      ),
+      ),*/,
     ];
   }
 
@@ -102,7 +104,8 @@ class CommunityService {
         forumId: forumId,
         title: '¿Cuál es el mejor stack para una fintech en 2024?',
         authorName: 'María González',
-        authorPhotoUrl: 'https://i.pravatar.cc/150?img=1',
+        authorPhotoUrl:
+            'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200',
         preview:
             'Estoy evaluando entre Flutter + Firebase vs React Native + AWS...',
         repliesCount: 23,
@@ -187,7 +190,8 @@ class CommunityService {
         description:
             'Plataforma de microcréditos diseñada para emprendedoras en Latinoamérica',
         founderName: 'María González',
-        founderPhotoUrl: 'https://i.pravatar.cc/150?img=1',
+        founderPhotoUrl:
+            'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200',
         logoUrl: 'https://picsum.photos/100',
         industry: Industry.fintech,
         stage: StartupStage.preSeed,

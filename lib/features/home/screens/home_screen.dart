@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
       founderPhotoUrl: 'https://i.pravatar.cc/150?img=5',
       thumbnailUrl: 'https://picsum.photos/seed/mindflow/600/400',
       description:
-          'AI-powered mental wellness platform tailored for women entrepreneurs. Personalized coaching, mood tracking, and burnout prevention.',
+          'Plataforma de bienestar mental basada en inteligencia artificial y diseñada específicamente para mujeres emprendedoras. Coaching personalizado, seguimiento del estado de ánimo y prevención del agotamiento.',
       category: 'Health',
       categoryColor: const Color(0xFFEC4899),
       techStack: ['Python', 'TensorFlow', 'AWS'],
@@ -39,10 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
       id: '2',
       name: 'FinaHer',
       founderName: 'María González',
-      founderPhotoUrl: 'https://i.pravatar.cc/150?img=1',
+      founderPhotoUrl:
+          'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200',
       thumbnailUrl: 'https://picsum.photos/seed/finaher/600/400',
       description:
-          'Micro-lending platform designed for women-led startups in Latin America. Zero collateral, fast approval, community-backed.',
+          'Plataforma de microcréditos diseñada para emprendedoras en Latinoamérica. Sin colateral, aprobación rápida, respaldada por la comunidad.',
       category: 'Fintech',
       categoryColor: const Color(0xFF10B981),
       techStack: ['Flutter', 'Firebase', 'Stripe'],
@@ -58,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
       founderPhotoUrl: 'https://i.pravatar.cc/150?img=9',
       thumbnailUrl: 'https://picsum.photos/seed/eduspark/600/400',
       description:
-          'Adaptive learning platform using ML to personalize educational paths for underprivileged students across Latin America.',
+          'Plataforma de aprendizaje adaptativo que utiliza el aprendizaje automático para personalizar las trayectorias educativas de los estudiantes desfavorecidos de toda América Latina.',
       category: 'EdTech',
       categoryColor: const Color(0xFFF59E0B),
       techStack: ['React Native', 'Node.js', 'ML'],
@@ -74,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
       founderPhotoUrl: 'https://i.pravatar.cc/150?img=16',
       thumbnailUrl: 'https://picsum.photos/seed/novamind/600/400',
       description:
-          'Generative AI assistant for small business owners. Automates invoicing, inventory management, and customer communication.',
+          'Asistente de IA generativa para propietarios de pequeñas empresas. Automatiza facturación, gestión de inventario y comunicación con clientes.',
       category: 'AI',
       categoryColor: const Color(0xFF8B5CF6),
       techStack: ['Python', 'OpenAI', 'FastAPI', 'Docker'],
@@ -90,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
       founderPhotoUrl: 'https://i.pravatar.cc/150?img=21',
       thumbnailUrl: 'https://picsum.photos/seed/greentrace/600/400',
       description:
-          'AI-driven carbon footprint tracker for SMEs. Real-time supply chain analysis with actionable sustainability insights.',
+          'Seguimiento de huella de carbono impulsado por IA para PYMES. Análisis en tiempo real de la cadena de suministro con información accionable sobre sostenibilidad.',
       category: 'AI',
       categoryColor: const Color(0xFF8B5CF6),
       techStack: ['Python', 'TensorFlow', 'GCP', 'GraphQL'],
@@ -106,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
       founderPhotoUrl: 'https://i.pravatar.cc/150?img=32',
       thumbnailUrl: 'https://picsum.photos/seed/payher/600/400',
       description:
-          'Wage-on-demand fintech app targeting gig economy workers. Access earned wages instantly without waiting for payday.',
+          'App de fintech de pago por demanda para trabajadores del economía gig. Acceso inmediato a los salarios ganados sin esperar al día de pago.',
       category: 'Fintech',
       categoryColor: const Color(0xFF10B981),
       techStack: ['Flutter', 'Node.js', 'PostgreSQL'],
@@ -135,7 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverToBoxAdapter(child: _buildPitchWallHeader()),
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) => PitchCard(project: _filteredProjects[index]),
+                (context, index) =>
+                    PitchCard(project: _filteredProjects[index]),
                 childCount: _filteredProjects.length,
               ),
             ),
@@ -168,7 +170,11 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Stack(
               clipBehavior: Clip.none,
               children: [
-                const Icon(Icons.notifications_outlined, color: Colors.white70, size: 26),
+                const Icon(
+                  Icons.notifications_outlined,
+                  color: Colors.white70,
+                  size: 26,
+                ),
                 Positioned(
                   top: -2,
                   right: -2,
@@ -195,7 +201,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: const CircleAvatar(
                 radius: 18,
-                backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=47'),
+                backgroundImage: NetworkImage(
+                  'https://i.pravatar.cc/150?img=47',
+                ),
               ),
             ),
           ),
