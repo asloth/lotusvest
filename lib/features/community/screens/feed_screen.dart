@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/models.dart';
 import '../services/community_service.dart';
 import '../widgets/post_card.dart';
@@ -18,6 +19,7 @@ class _FeedScreenState extends State<FeedScreen> {
   static const Color _primaryColor = Color(0xFFA78BFA);
   static const Color _backgroundColor = Color(0xFF121212);
   static const Color _surfaceColor = Color(0xFF1E1E1E);
+  static const Color _verifiedColor = Color(0xFF34D399);
 
   @override
   void dispose() {
@@ -38,8 +40,11 @@ class _FeedScreenState extends State<FeedScreen> {
         child: CustomScrollView(
           controller: _scrollController,
           slivers: [
-            SliverToBoxAdapter(child: _buildStoriesSection()),
-            SliverToBoxAdapter(child: _buildQuickActions()),
+            SliverToBoxAdapter(child: _buildStartupProfile()),
+            SliverToBoxAdapter(child: _buildFundingProgress()),
+            SliverToBoxAdapter(child: _buildTechStack()),
+            SliverToBoxAdapter(child: _buildTrustIndicators()),
+            SliverToBoxAdapter(child: _buildSectionHeader()),
             SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
                 return PostCard(post: _posts[index]);
@@ -52,148 +57,595 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 
-  Widget _buildStoriesSection() {
-    final startups = CommunityService.getMockStartups();
-
+  Widget _buildStartupProfile() {
     return Container(
-      height: 120,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: startups.length + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return _buildAddStoryButton();
-          }
-          final startup = startups[index - 1];
-          return _buildStoryItem(startup);
-        },
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: _surfaceColor,
+        borderRadius: BorderRadius.circular(24),
       ),
-    );
-  }
-
-  Widget _buildAddStoryButton() {
-    return Container(
-      width: 70,
-      margin: const EdgeInsets.only(right: 12),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: _surfaceColor,
-              shape: BoxShape.circle,
-              border: Border.all(color: _primaryColor.withOpacity(0.5), width: 2),
-            ),
-            child: const Icon(Icons.add, color: _primaryColor, size: 28),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Founder photo
+              Container(
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: [_primaryColor, _primaryColor.withOpacity(0.5)],
+                  ),
+                ),
+                child: Container(
+                  width: 70,
+                  height: 70,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: _surfaceColor, width: 3),
+                    image: const DecorationImage(
+                      image: NetworkImage(
+                        'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200',
+                      ),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              // Startup info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Text(
+                          'FinaHer',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        _buildVerifiedBadge(),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'María González',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white70,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Fundadora & CEO',
+                      style: TextStyle(fontSize: 12, color: _primaryColor),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
+          // Description
           const Text(
-            'Tu startup',
-            style: TextStyle(fontSize: 11, color: Colors.white70),
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
+            'Plataforma fintech que democratiza el acceso a servicios financieros para mujeres emprendedoras en Latinoamérica. Ofrecemos microcréditos, educación financiera y herramientas de gestión.',
+            style: TextStyle(fontSize: 14, color: Colors.white70, height: 1.6),
+          ),
+          const SizedBox(height: 16),
+          // Stage badge
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: _primaryColor.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.rocket_launch, size: 14, color: _primaryColor),
+                    SizedBox(width: 6),
+                    Text(
+                      'Pre-Seed',
+                      style: TextStyle(
+                        color: _primaryColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF60A5FA).withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.category, size: 14, color: Color(0xFF60A5FA)),
+                    SizedBox(width: 6),
+                    Text(
+                      'Fintech',
+                      style: TextStyle(
+                        color: Color(0xFF60A5FA),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildStoryItem(Startup startup) {
+  Widget _buildVerifiedBadge() {
     return Container(
-      width: 70,
-      margin: const EdgeInsets.only(right: 12),
-      child: Column(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: _verifiedColor.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: const Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            padding: const EdgeInsets.all(3),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: [
-                  _primaryColor,
-                  _primaryColor.withOpacity(0.5),
+          Icon(Icons.verified, size: 14, color: _verifiedColor),
+          SizedBox(width: 4),
+          Text(
+            'Verificada',
+            style: TextStyle(
+              color: _verifiedColor,
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFundingProgress() {
+    const double goalAmount = 50000;
+    const double currentAmount = 32500;
+    const double progress = currentAmount / goalAmount;
+    const double remainingAmount = goalAmount - currentAmount;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: _surfaceColor,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Meta de Financiamiento',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: _primaryColor.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  '${(progress * 100).toInt()}%',
+                  style: const TextStyle(
+                    color: _primaryColor,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Progress bar
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 12,
+              backgroundColor: _backgroundColor,
+              valueColor: const AlwaysStoppedAnimation<Color>(_primaryColor),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Recaudado',
+                    style: TextStyle(color: Colors.white54, fontSize: 12),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '\$${currentAmount.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},')}',
+                    style: const TextStyle(
+                      color: _primaryColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Text(
+                    'Faltan',
+                    style: TextStyle(color: Colors.white54, fontSize: 12),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '\$${remainingAmount.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},')}',
+                    style: const TextStyle(
+                      color: Color(0xFFFFD93D),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              const Icon(Icons.people_outline, size: 16, color: Colors.white54),
+              const SizedBox(width: 6),
+              const Text(
+                '47 inversores',
+                style: TextStyle(color: Colors.white54, fontSize: 12),
+              ),
+              const SizedBox(width: 16),
+              const Icon(Icons.access_time, size: 16, color: Colors.white54),
+              const SizedBox(width: 6),
+              const Text(
+                '23 días restantes',
+                style: TextStyle(color: Colors.white54, fontSize: 12),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTechStack() {
+    final technologies = [
+      {'name': 'Flutter', 'icon': '📱'},
+      {'name': 'Firebase', 'icon': '🔥'},
+      {'name': 'Python', 'icon': '🐍'},
+      {'name': 'AWS', 'icon': '☁️'},
+      {'name': 'Machine Learning', 'icon': '🤖'},
+    ];
+
+    return Container(
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: _surfaceColor,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Stack Tecnológico',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: technologies.map((tech) {
+              return Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: _backgroundColor,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(tech['icon']!, style: const TextStyle(fontSize: 14)),
+                    const SizedBox(width: 6),
+                    Text(
+                      tech['name']!,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTrustIndicators() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: _surfaceColor,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.shield_outlined, size: 20, color: _verifiedColor),
+              SizedBox(width: 8),
+              Text(
+                'Indicadores de Confianza',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Verification items
+          _buildTrustItem(
+            Icons.verified_user,
+            'Identidad Verificada',
+            'Documentación revisada por LotusVest',
+            _verifiedColor,
+          ),
+          const SizedBox(height: 12),
+          _buildTrustItem(
+            Icons.business,
+            'Empresa Registrada',
+            'RFC y acta constitutiva validados',
+            _verifiedColor,
+          ),
+          const SizedBox(height: 12),
+          _buildTrustItem(
+            Icons.account_balance,
+            'Due Diligence Completado',
+            'Revisión financiera aprobada',
+            _verifiedColor,
+          ),
+          const SizedBox(height: 16),
+          const Divider(color: Colors.white12),
+          const SizedBox(height: 16),
+          // LinkedIn connection
+          GestureDetector(
+            onTap: () => _launchLinkedIn(),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0A66C2).withOpacity(0.15),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: const Color(0xFF0A66C2).withOpacity(0.3),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF0A66C2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.link,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'LinkedIn de María González',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          '+500 conexiones • Ex-Goldman Sachs',
+                          style: TextStyle(color: Colors.white54, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Icon(
+                    Icons.open_in_new,
+                    color: Color(0xFF0A66C2),
+                    size: 20,
+                  ),
                 ],
               ),
             ),
-            child: Container(
-              width: 54,
-              height: 54,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: _surfaceColor, width: 2),
-                image: DecorationImage(
-                  image: NetworkImage(startup.founderPhotoUrl),
-                  fit: BoxFit.cover,
+          ),
+          const SizedBox(height: 12),
+          // Endorsements
+          Row(
+            children: [
+              _buildEndorsementBadge('🏆', 'Top 10 Startups 2024'),
+              const SizedBox(width: 8),
+              _buildEndorsementBadge('🎓', 'Y Combinator Aplicante'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTrustItem(
+    IconData icon,
+    String title,
+    String subtitle,
+    Color color,
+  ) {
+    return Row(
+      children: [
+        Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, size: 18, color: color),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            startup.name,
-            style: const TextStyle(fontSize: 11, color: Colors.white70),
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildQuickActions() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildQuickActionButton(
-              Icons.campaign_outlined,
-              'Publicar avance',
-              _primaryColor,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: _buildQuickActionButton(
-              Icons.emoji_events_outlined,
-              'Compartir logro',
-              const Color(0xFFFFD93D),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildQuickActionButton(IconData icon, String label, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: BoxDecoration(
-        color: _surfaceColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: color, size: 20),
-          const SizedBox(width: 8),
-          Flexible(
-            child: Text(
-              label,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.w600,
-                fontSize: 13,
+              Text(
+                subtitle,
+                style: const TextStyle(color: Colors.white54, fontSize: 11),
               ),
-              overflow: TextOverflow.ellipsis,
+            ],
+          ),
+        ),
+        const Icon(Icons.check_circle, size: 18, color: _verifiedColor),
+      ],
+    );
+  }
+
+  Widget _buildEndorsementBadge(String emoji, String text) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+        decoration: BoxDecoration(
+          color: _backgroundColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white12),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(emoji, style: const TextStyle(fontSize: 16)),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                text,
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Avances Recientes',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          TextButton(
+            onPressed: () {},
+            child: const Text(
+              'Ver todos',
+              style: TextStyle(
+                color: _primaryColor,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _launchLinkedIn() async {
+    final Uri url = Uri.parse(
+      'https://www.linkedin.com/in/maria-gonzalez-finaher',
+    );
+    try {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      // Handle error silently
+    }
   }
 }
