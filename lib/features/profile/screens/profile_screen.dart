@@ -213,9 +213,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildAppBar(),
           SliverToBoxAdapter(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildIdentity(),
+                const SizedBox(height: 24),
+                Center(child: _buildAvatar()),
+                const SizedBox(height: 16),
                 _buildStats(),
                 if (!_isOwnProfile) _buildActionButtons(),
                 if (_isOwnProfile) _buildEditButton(),
@@ -233,11 +235,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // ── sliver app bar ────────────────────────────────────────────────────────
+  // ── app bar (toolbar only, no cover) ─────────────────────────────────────
 
   Widget _buildAppBar() {
     return SliverAppBar(
-      expandedHeight: 180,
       pinned: true,
       backgroundColor: _bg,
       leading: _isOwnProfile
@@ -258,100 +259,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onPressed: () {},
           ),
       ],
-      flexibleSpace: FlexibleSpaceBar(
-        background: Stack(
-          fit: StackFit.expand,
-          children: [
-            // cover
-            if (_profile.coverUrl != null)
-              Image.network(
-                _profile.coverUrl!,
-                fit: BoxFit.cover,
-              )
-            else
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      const Color(0xFF7C3AED),
-                      _primary.withValues(alpha: 0.6),
-                    ],
-                  ),
-                ),
-              ),
-            // scrim
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    _bg.withValues(alpha: 0.8),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
-  // ── avatar + name/subheader ───────────────────────────────────────────────
+  // ── avatar ────────────────────────────────────────────────────────────────
 
-  Widget _buildIdentity() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 0),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: _bg, width: 4),
-            ),
-            child: CircleAvatar(
-              radius: 44,
-              backgroundImage: NetworkImage(_profile.photoUrl),
-            ),
-          ),
-          const Spacer(),
-          if (_isOwnProfile)
-            const SizedBox.shrink()
-          else
-            // quick follow toggle at top-right of avatar row
-            _buildFollowChip(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFollowChip() {
-    return GestureDetector(
-      onTap: _onFollow,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-        decoration: BoxDecoration(
-          color: _isFollowing ? _surface2 : _primary,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: _isFollowing ? _primary : Colors.transparent,
-          ),
-        ),
-        child: Text(
-          _isFollowing ? 'Siguiendo' : 'Seguir',
-          style: TextStyle(
-            color: _isFollowing ? _primary : Colors.white,
-            fontWeight: FontWeight.w700,
-            fontSize: 13,
-          ),
-        ),
-      ),
+  Widget _buildAvatar() {
+    return CircleAvatar(
+      radius: 48,
+      backgroundImage: NetworkImage(_profile.photoUrl),
     );
   }
 
@@ -359,12 +275,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildStats() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             _profile.name,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 22,
@@ -374,6 +291,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(height: 4),
           Text(
             _profile.subheader,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               color: Color(0xFFA78BFA),
               fontSize: 13,
@@ -382,15 +300,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const SizedBox(height: 16),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _statItem(_formatCount(_profile.followersCount), 'Seguidoras'),
-              const SizedBox(width: 24),
+              _statItem(_formatCount(_profile.connectionsCount), 'Conexiones'),
+              const SizedBox(width: 32),
               _statItem(_formatCount(_profile.followingCount), 'Siguiendo'),
-              const SizedBox(width: 24),
-              _statItem(
-                _formatCount(_profile.connectionsCount),
-                'Conexiones',
-              ),
             ],
           ),
         ],
