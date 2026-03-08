@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'features/auth/screens/login_screen.dart';
+import 'features/auth/screens/signup_screen.dart';
 import 'features/community/screens/startup_lab_screen.dart';
 import 'features/home/screens/home_screen.dart';
 import 'widgets/bottom_nav_bar.dart';
@@ -26,6 +27,7 @@ class LotusVestApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (_) => const LoginScreen(),
+        '/signup': (_) => const SignupScreen(),
         '/home': (_) => const MainShell(),
       },
     );
