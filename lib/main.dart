@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'features/auth/screens/login_screen.dart';
 import 'features/community/screens/startup_lab_screen.dart';
 import 'features/home/screens/home_screen.dart';
 import 'widgets/bottom_nav_bar.dart';
@@ -22,7 +23,11 @@ class LotusVestApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color(0xFF121212),
       ),
-      home: const MainShell(),
+      initialRoute: '/login',
+      routes: {
+        '/login': (_) => const LoginScreen(),
+        '/home': (_) => const MainShell(),
+      },
     );
   }
 }
