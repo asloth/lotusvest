@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'features/community/screens/startup_lab_screen.dart';
+import 'features/home/screens/home_screen.dart';
 import 'widgets/bottom_nav_bar.dart';
 
 void main() {
@@ -38,7 +39,7 @@ class _MainShellState extends State<MainShell> {
 
   // Placeholder pages — replace each with real screen widgets
   static const List<Widget> _pages = [
-    _PlaceholderPage(label: 'Home'),
+    HomeScreen(),
     _PlaceholderPage(label: 'Discover'),
     StartupLabScreen(),
     _PlaceholderPage(label: 'Profile'),
