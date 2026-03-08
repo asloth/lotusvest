@@ -14,6 +14,11 @@ class _FeedScreenState extends State<FeedScreen> {
   final List<Post> _posts = CommunityService.getMockPosts();
   final ScrollController _scrollController = ScrollController();
 
+  // Theme colors
+  static const Color _primaryColor = Color(0xFFA78BFA);
+  static const Color _backgroundColor = Color(0xFF121212);
+  static const Color _surfaceColor = Color(0xFF1E1E1E);
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -22,24 +27,27 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        await Future.delayed(const Duration(seconds: 1));
-        setState(() {});
-      },
-      color: const Color(0xFF6B4EFF),
-      child: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          SliverToBoxAdapter(child: _buildStoriesSection()),
-          SliverToBoxAdapter(child: _buildQuickActions()),
-          SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return PostCard(post: _posts[index]);
-            }, childCount: _posts.length),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 80)),
-        ],
+    return Container(
+      color: _backgroundColor,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await Future.delayed(const Duration(seconds: 1));
+          setState(() {});
+        },
+        color: _primaryColor,
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            SliverToBoxAdapter(child: _buildStoriesSection()),
+            SliverToBoxAdapter(child: _buildQuickActions()),
+            SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return PostCard(post: _posts[index]);
+              }, childCount: _posts.length),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 80)),
+          ],
+        ),
       ),
     );
   }
@@ -75,16 +83,16 @@ class _FeedScreenState extends State<FeedScreen> {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.grey[200],
+              color: _surfaceColor,
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.grey[300]!, width: 2),
+              border: Border.all(color: _primaryColor.withOpacity(0.5), width: 2),
             ),
-            child: const Icon(Icons.add, color: Color(0xFF6B4EFF), size: 28),
+            child: const Icon(Icons.add, color: _primaryColor, size: 28),
           ),
           const SizedBox(height: 8),
           const Text(
             'Tu startup',
-            style: TextStyle(fontSize: 11),
+            style: TextStyle(fontSize: 11, color: Colors.white70),
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
           ),
@@ -105,8 +113,8 @@ class _FeedScreenState extends State<FeedScreen> {
               shape: BoxShape.circle,
               gradient: LinearGradient(
                 colors: [
-                  const Color(0xFF6B4EFF),
-                  const Color(0xFF6B4EFF).withOpacity(0.5),
+                  _primaryColor,
+                  _primaryColor.withOpacity(0.5),
                 ],
               ),
             ),
@@ -115,7 +123,7 @@ class _FeedScreenState extends State<FeedScreen> {
               height: 54,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
+                border: Border.all(color: _surfaceColor, width: 2),
                 image: DecorationImage(
                   image: NetworkImage(startup.founderPhotoUrl),
                   fit: BoxFit.cover,
@@ -126,7 +134,7 @@ class _FeedScreenState extends State<FeedScreen> {
           const SizedBox(height: 8),
           Text(
             startup.name,
-            style: const TextStyle(fontSize: 11),
+            style: const TextStyle(fontSize: 11, color: Colors.white70),
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
           ),
@@ -144,7 +152,7 @@ class _FeedScreenState extends State<FeedScreen> {
             child: _buildQuickActionButton(
               Icons.campaign_outlined,
               'Publicar avance',
-              const Color(0xFF6B4EFF),
+              _primaryColor,
             ),
           ),
           const SizedBox(width: 12),
@@ -152,7 +160,7 @@ class _FeedScreenState extends State<FeedScreen> {
             child: _buildQuickActionButton(
               Icons.emoji_events_outlined,
               'Compartir logro',
-              Colors.amber[700]!,
+              const Color(0xFFFFD93D),
             ),
           ),
         ],
@@ -164,15 +172,9 @@ class _FeedScreenState extends State<FeedScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: _surfaceColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

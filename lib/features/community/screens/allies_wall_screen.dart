@@ -14,6 +14,11 @@ class _AlliesWallScreenState extends State<AlliesWallScreen> {
   final List<AllyOffer> _offers = CommunityService.getMockAllyOffers();
   AllyOfferType? _selectedFilter;
 
+  // Theme colors
+  static const Color _primaryColor = Color(0xFFA78BFA);
+  static const Color _backgroundColor = Color(0xFF121212);
+  static const Color _surfaceColor = Color(0xFF1E1E1E);
+
   List<AllyOffer> get filteredOffers {
     if (_selectedFilter == null) return _offers;
     return _offers.where((o) => o.type == _selectedFilter).toList();
@@ -21,27 +26,30 @@ class _AlliesWallScreenState extends State<AlliesWallScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        await Future.delayed(const Duration(seconds: 1));
-        setState(() {});
-      },
-      color: const Color(0xFF6B4EFF),
-      child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(child: _buildHeader()),
-          SliverToBoxAdapter(child: _buildFilters()),
-          SliverToBoxAdapter(child: _buildOfferYourHelp()),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return AllyOfferCard(offer: filteredOffers[index]);
-              }, childCount: filteredOffers.length),
+    return Container(
+      color: _backgroundColor,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await Future.delayed(const Duration(seconds: 1));
+          setState(() {});
+        },
+        color: _primaryColor,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(child: _buildHeader()),
+            SliverToBoxAdapter(child: _buildFilters()),
+            SliverToBoxAdapter(child: _buildOfferYourHelp()),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return AllyOfferCard(offer: filteredOffers[index]);
+                }, childCount: filteredOffers.length),
+              ),
             ),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 80)),
-        ],
+            const SliverToBoxAdapter(child: SizedBox(height: 80)),
+          ],
+        ),
       ),
     );
   }
@@ -49,23 +57,27 @@ class _AlliesWallScreenState extends State<AlliesWallScreen> {
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.all(16),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.handshake, color: Color(0xFF6B4EFF), size: 28),
+              Icon(Icons.handshake, color: _primaryColor, size: 28),
               SizedBox(width: 12),
               Text(
                 'Muro de Aliados',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             'Conecta con mentores, inversionistas y profesionales que quieren apoyar tu startup',
-            style: TextStyle(color: Colors.grey[600], fontSize: 14),
+            style: TextStyle(color: Colors.white54, fontSize: 14),
           ),
         ],
       ),
@@ -102,17 +114,17 @@ class _AlliesWallScreenState extends State<AlliesWallScreen> {
         margin: const EdgeInsets.only(right: 8),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF6B4EFF) : Colors.white,
+          color: isSelected ? _primaryColor : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? const Color(0xFF6B4EFF) : Colors.grey[300]!,
+            color: isSelected ? _primaryColor : Colors.white24,
           ),
         ),
         child: Center(
           child: Text(
             label,
             style: TextStyle(
-              color: isSelected ? Colors.white : Colors.grey[700],
+              color: isSelected ? Colors.white : Colors.white70,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
@@ -128,11 +140,11 @@ class _AlliesWallScreenState extends State<AlliesWallScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF6B4EFF),
-            const Color(0xFF6B4EFF).withOpacity(0.8),
+            _primaryColor,
+            _primaryColor.withOpacity(0.7),
           ],
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(24),
       ),
       child: Row(
         children: [
@@ -164,7 +176,7 @@ class _AlliesWallScreenState extends State<AlliesWallScreen> {
             onPressed: () => _showOfferDialog(context),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
-              foregroundColor: const Color(0xFF6B4EFF),
+              foregroundColor: _primaryColor,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -188,8 +200,8 @@ class _AlliesWallScreenState extends State<AlliesWallScreen> {
       builder: (context) => Container(
         height: MediaQuery.of(context).size.height * 0.85,
         decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          color: _surfaceColor,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -200,7 +212,7 @@ class _AlliesWallScreenState extends State<AlliesWallScreen> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: Colors.white24,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -208,12 +220,20 @@ class _AlliesWallScreenState extends State<AlliesWallScreen> {
             const SizedBox(height: 20),
             const Text(
               'Ofrece tu apoyo',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 24),
             const Text(
               'Tipo de apoyo',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 12),
             Wrap(
@@ -228,22 +248,46 @@ class _AlliesWallScreenState extends State<AlliesWallScreen> {
             ),
             const SizedBox(height: 24),
             TextField(
+              style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 labelText: 'Título de tu oferta',
+                labelStyle: const TextStyle(color: Colors.white54),
                 hintText: 'Ej: Mentoría en fundraising',
+                hintStyle: const TextStyle(color: Colors.white38),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(color: Colors.white24),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(color: Colors.white24),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(color: _primaryColor),
                 ),
               ),
             ),
             const SizedBox(height: 16),
             TextField(
               maxLines: 4,
+              style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 labelText: 'Descripción',
+                labelStyle: const TextStyle(color: Colors.white54),
                 hintText: 'Describe cómo puedes ayudar...',
+                hintStyle: const TextStyle(color: Colors.white38),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(color: Colors.white24),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(color: Colors.white24),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(color: _primaryColor),
                 ),
               ),
             ),
@@ -254,17 +298,21 @@ class _AlliesWallScreenState extends State<AlliesWallScreen> {
                 onPressed: () {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Tu oferta ha sido publicada'),
-                      backgroundColor: Color(0xFF6B4EFF),
+                    SnackBar(
+                      content: const Text('Tu oferta ha sido publicada'),
+                      backgroundColor: _primaryColor,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6B4EFF),
+                  backgroundColor: _primaryColor,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
                 child: const Text(
@@ -288,10 +336,14 @@ class _AlliesWallScreenState extends State<AlliesWallScreen> {
       label: Text(label),
       selected: selected,
       onSelected: (value) {},
-      selectedColor: const Color(0xFF6B4EFF).withOpacity(0.2),
-      checkmarkColor: const Color(0xFF6B4EFF),
+      backgroundColor: _backgroundColor,
+      selectedColor: _primaryColor.withOpacity(0.3),
+      checkmarkColor: _primaryColor,
+      side: BorderSide(
+        color: selected ? _primaryColor : Colors.white24,
+      ),
       labelStyle: TextStyle(
-        color: selected ? const Color(0xFF6B4EFF) : Colors.grey[700],
+        color: selected ? _primaryColor : Colors.white70,
         fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
       ),
     );

@@ -5,6 +5,10 @@ class ForumCard extends StatelessWidget {
   final Forum forum;
   final VoidCallback onTap;
 
+  // Theme colors
+  static const Color _primaryColor = Color(0xFFA78BFA);
+  static const Color _surfaceColor = Color(0xFF1E1E1E);
+
   const ForumCard({super.key, required this.forum, required this.onTap});
 
   @override
@@ -15,15 +19,8 @@ class ForumCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          color: _surfaceColor,
+          borderRadius: BorderRadius.circular(24),
         ),
         child: Row(
           children: [
@@ -31,8 +28,8 @@ class ForumCard extends StatelessWidget {
               width: 56,
               height: 56,
               decoration: BoxDecoration(
-                color: _getCategoryColor().withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
+                color: _getCategoryColor().withOpacity(0.15),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Center(
                 child: Text(
@@ -51,45 +48,52 @@ class ForumCard extends StatelessWidget {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
+                      color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     forum.description,
-                    style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                    style: const TextStyle(color: Colors.white54, fontSize: 13),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.forum_outlined,
                         size: 14,
-                        color: Colors.grey[400],
+                        color: Colors.white38,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         '${forum.threadsCount} hilos',
-                        style: TextStyle(color: Colors.grey[500], fontSize: 12),
+                        style: const TextStyle(
+                          color: Colors.white38,
+                          fontSize: 12,
+                        ),
                       ),
                       const SizedBox(width: 16),
-                      Icon(
+                      const Icon(
                         Icons.people_outline,
                         size: 14,
-                        color: Colors.grey[400],
+                        color: Colors.white38,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         '${forum.membersCount} miembros',
-                        style: TextStyle(color: Colors.grey[500], fontSize: 12),
+                        style: const TextStyle(
+                          color: Colors.white38,
+                          fontSize: 12,
+                        ),
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            Icon(Icons.chevron_right, color: Colors.grey[400]),
+            const Icon(Icons.chevron_right, color: Colors.white38),
           ],
         ),
       ),
@@ -99,11 +103,11 @@ class ForumCard extends StatelessWidget {
   Color _getCategoryColor() {
     switch (forum.category) {
       case ForumCategory.technology:
-        return Colors.blue;
+        return const Color(0xFF60A5FA);
       case ForumCategory.marketStrategy:
-        return Colors.green;
+        return const Color(0xFF34D399);
       case ForumCategory.productFeedback:
-        return const Color(0xFF6B4EFF);
+        return _primaryColor;
     }
   }
 }

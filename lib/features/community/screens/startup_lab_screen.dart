@@ -14,6 +14,11 @@ class _StartupLabScreenState extends State<StartupLabScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  // Theme colors from claude.md
+  static const Color _primaryColor = Color(0xFFA78BFA);
+  static const Color _backgroundColor = Color(0xFF121212);
+  static const Color _surfaceColor = Color(0xFF1E1E1E);
+
   @override
   void initState() {
     super.initState();
@@ -29,9 +34,9 @@ class _StartupLabScreenState extends State<StartupLabScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F5FF),
+      backgroundColor: _backgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF6B4EFF),
+        backgroundColor: _surfaceColor,
         foregroundColor: Colors.white,
         elevation: 0,
         title: const Column(
@@ -39,36 +44,40 @@ class _StartupLabScreenState extends State<StartupLabScreen>
           children: [
             Text(
               'Startup Lab',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white,
+              ),
             ),
             Text(
               'Comunidad de Impacto',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
-                color: Colors.white70,
+                color: Color(0xFFA78BFA),
               ),
             ),
           ],
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(Icons.search, color: Colors.white70),
             onPressed: () {
               _showSearchDialog(context);
             },
           ),
           IconButton(
-            icon: const Icon(Icons.notifications_outlined),
+            icon: const Icon(Icons.notifications_outlined, color: Colors.white70),
             onPressed: () {},
           ),
         ],
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.white,
+          indicatorColor: _primaryColor,
           indicatorWeight: 3,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white60,
+          labelColor: _primaryColor,
+          unselectedLabelColor: Colors.white54,
           labelStyle: const TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 14,
@@ -88,7 +97,7 @@ class _StartupLabScreenState extends State<StartupLabScreen>
         onPressed: () {
           _showDonationBottomSheet(context);
         },
-        backgroundColor: const Color(0xFF6B4EFF),
+        backgroundColor: _primaryColor,
         icon: const Icon(Icons.favorite, color: Colors.white),
         label: const Text(
           'Donar',
@@ -106,8 +115,8 @@ class _StartupLabScreenState extends State<StartupLabScreen>
       builder: (context) => Container(
         height: MediaQuery.of(context).size.height * 0.85,
         decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          color: _surfaceColor,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -118,7 +127,7 @@ class _StartupLabScreenState extends State<StartupLabScreen>
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: Colors.white24,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -126,24 +135,35 @@ class _StartupLabScreenState extends State<StartupLabScreen>
             const SizedBox(height: 20),
             const Text(
               'Filtrar Startups',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 20),
             TextField(
+              style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Buscar por nombre, tecnología...',
-                prefixIcon: const Icon(Icons.search),
+                hintStyle: const TextStyle(color: Colors.white38),
+                prefixIcon: const Icon(Icons.search, color: Colors.white54),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Colors.grey[100],
+                fillColor: _backgroundColor,
               ),
             ),
             const SizedBox(height: 24),
             const Text(
               'Industria',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 12),
             Wrap(
@@ -161,7 +181,11 @@ class _StartupLabScreenState extends State<StartupLabScreen>
             const SizedBox(height: 24),
             const Text(
               'Etapa',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 12),
             Wrap(
@@ -179,10 +203,10 @@ class _StartupLabScreenState extends State<StartupLabScreen>
               child: ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6B4EFF),
+                  backgroundColor: _primaryColor,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
                 child: const Text(
@@ -206,10 +230,14 @@ class _StartupLabScreenState extends State<StartupLabScreen>
       label: Text(label),
       selected: selected,
       onSelected: (value) {},
-      selectedColor: const Color(0xFF6B4EFF).withOpacity(0.2),
-      checkmarkColor: const Color(0xFF6B4EFF),
+      backgroundColor: _backgroundColor,
+      selectedColor: _primaryColor.withOpacity(0.3),
+      checkmarkColor: _primaryColor,
+      side: BorderSide(
+        color: selected ? _primaryColor : Colors.white24,
+      ),
       labelStyle: TextStyle(
-        color: selected ? const Color(0xFF6B4EFF) : Colors.grey[700],
+        color: selected ? _primaryColor : Colors.white70,
         fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
       ),
     );
@@ -223,8 +251,8 @@ class _StartupLabScreenState extends State<StartupLabScreen>
       builder: (context) => Container(
         height: MediaQuery.of(context).size.height * 0.7,
         decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          color: _surfaceColor,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -235,7 +263,7 @@ class _StartupLabScreenState extends State<StartupLabScreen>
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: Colors.white24,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -243,17 +271,25 @@ class _StartupLabScreenState extends State<StartupLabScreen>
             const SizedBox(height: 20),
             const Text(
               'Impulsa una Startup',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               'Tu donación genera impacto directo en emprendedoras',
-              style: TextStyle(color: Colors.grey[600], fontSize: 14),
+              style: TextStyle(color: Colors.white54, fontSize: 14),
             ),
             const SizedBox(height: 24),
             const Text(
               'Selecciona un monto',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 12),
             Row(
@@ -269,11 +305,23 @@ class _StartupLabScreenState extends State<StartupLabScreen>
             ),
             const SizedBox(height: 24),
             TextField(
+              style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'O ingresa otro monto',
+                hintStyle: const TextStyle(color: Colors.white38),
                 prefixText: '\$ ',
+                prefixStyle: const TextStyle(color: Colors.white),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(color: Colors.white24),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(color: Colors.white24),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(color: _primaryColor),
                 ),
               ),
               keyboardType: TextInputType.number,
@@ -282,17 +330,17 @@ class _StartupLabScreenState extends State<StartupLabScreen>
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFFF0EDFF),
-                borderRadius: BorderRadius.circular(12),
+                color: _primaryColor.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: const Row(
                 children: [
-                  Icon(Icons.security, color: Color(0xFF6B4EFF)),
+                  Icon(Icons.security, color: _primaryColor),
                   SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       'Pagos seguros procesados con encriptación de grado bancario',
-                      style: TextStyle(fontSize: 12, color: Color(0xFF6B4EFF)),
+                      style: TextStyle(fontSize: 12, color: _primaryColor),
                     ),
                   ),
                 ],
@@ -305,17 +353,21 @@ class _StartupLabScreenState extends State<StartupLabScreen>
                 onPressed: () {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Donación procesada exitosamente'),
-                      backgroundColor: Color(0xFF6B4EFF),
+                    SnackBar(
+                      content: const Text('Donación procesada exitosamente'),
+                      backgroundColor: _primaryColor,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6B4EFF),
+                  backgroundColor: _primaryColor,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
                 child: const Text(
@@ -339,17 +391,17 @@ class _StartupLabScreenState extends State<StartupLabScreen>
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFF6B4EFF) : Colors.white,
+          color: selected ? _primaryColor : Colors.transparent,
           border: Border.all(
-            color: selected ? const Color(0xFF6B4EFF) : Colors.grey[300]!,
+            color: selected ? _primaryColor : Colors.white24,
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Center(
           child: Text(
             amount,
             style: TextStyle(
-              color: selected ? Colors.white : Colors.grey[700],
+              color: selected ? Colors.white : Colors.white70,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),

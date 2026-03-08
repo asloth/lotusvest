@@ -40,7 +40,7 @@ class _MainShellState extends State<MainShell> {
   static const List<Widget> _pages = [
     _PlaceholderPage(label: 'Home'),
     _PlaceholderPage(label: 'Discover'),
-    _PlaceholderPage(label: 'Community'),
+    StartupLabScreen(),
     _PlaceholderPage(label: 'Profile'),
   ];
 
