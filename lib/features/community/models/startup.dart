@@ -1,3 +1,6 @@
+import 'startup_verification.dart';
+import 'post.dart';
+
 enum StartupStage { ideation, preSeed, seed }
 
 enum Industry {
@@ -25,6 +28,10 @@ class Startup {
   final double currentFunding;
   final int membersCount;
   final DateTime createdAt;
+  final int investorsCount;
+  final int? daysRemaining;
+  final StartupVerification? verification;
+  final List<Post> posts;
 
   Startup({
     required this.id,
@@ -40,6 +47,10 @@ class Startup {
     required this.currentFunding,
     required this.membersCount,
     required this.createdAt,
+    this.investorsCount = 0,
+    this.daysRemaining,
+    this.verification,
+    this.posts = const [],
   });
 
   double get fundingProgress => currentFunding / fundingGoal;

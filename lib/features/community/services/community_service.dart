@@ -216,6 +216,102 @@ class CommunityService {
   }
 
   static List<Startup> getMockStartups() {
+    // Posts para FinaHer
+    final finaHerPosts = [
+      Post(
+        id: '1',
+        startupId: 'startup1',
+        authorName: 'María González',
+        authorPhotoUrl:
+            'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200',
+        content:
+            '¡Acabamos de cerrar nuestra primera ronda de pruebas beta! 🚀 Más de 100 usuarios probando nuestra plataforma de microcréditos para emprendedoras. Los resultados son increíbles.',
+        imageUrls: [],
+        type: PostType.milestone,
+        likesCount: 45,
+        commentsCount: 12,
+        createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+      ),
+      Post(
+        id: '2',
+        startupId: 'startup1',
+        authorName: 'María González',
+        authorPhotoUrl:
+            'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200',
+        content:
+            'Nuestro equipo trabajando en las nuevas funciones de IA para detección de fraude. ¡El futuro de Fintech es ahora!',
+        imageUrls: ['https://picsum.photos/400/300'],
+        type: PostType.teamPhoto,
+        likesCount: 32,
+        commentsCount: 8,
+        createdAt: DateTime.now().subtract(const Duration(days: 1)),
+      ),
+    ];
+
+    // Posts para MindFlow
+    final mindFlowPosts = [
+      Post(
+        id: '3',
+        startupId: 'startup2',
+        authorName: 'Ana Rodríguez',
+        authorPhotoUrl: 'https://i.pravatar.cc/150?img=5',
+        content:
+            'Preview de nuestra app de salud mental para mujeres emprendedoras. El bienestar es productividad. 💜',
+        imageUrls: ['https://picsum.photos/400/250'],
+        type: PostType.productPreview,
+        likesCount: 67,
+        commentsCount: 23,
+        createdAt: DateTime.now().subtract(const Duration(days: 2)),
+      ),
+    ];
+
+    // Verificación completa para FinaHer
+    final finaHerVerification = StartupVerification(
+      startupId: 'startup1',
+      isIdentityVerified: true,
+      isRegisteredCompany: true,
+      isDueDiligenceCompleted: true,
+      badges: [
+        Badge(
+          id: 'top10_2024',
+          name: 'Top 10 Startups 2024',
+          emoji: '🏆',
+          earnedAt: DateTime.now().subtract(const Duration(days: 30)),
+          issuedBy: 'LotusVest Community',
+        ),
+        Badge(
+          id: 'yc_applicant',
+          name: 'Y Combinator Aplicante',
+          emoji: '🎓',
+          earnedAt: DateTime.now().subtract(const Duration(days: 60)),
+          issuedBy: 'Y Combinator',
+        ),
+      ],
+      founderSocial: FounderSocial(
+        linkedinUrl: 'https://linkedin.com/in/maria-gonzalez-finaher',
+        linkedinConnections: 500,
+        linkedinHeadline: 'Ex-Goldman Sachs',
+        isLinkedinVerified: true,
+      ),
+      verifiedAt: DateTime.now().subtract(const Duration(days: 45)),
+    );
+
+    // Verificación parcial para MindFlow
+    final mindFlowVerification = StartupVerification(
+      startupId: 'startup2',
+      isIdentityVerified: true,
+      isRegisteredCompany: false,
+      isDueDiligenceCompleted: false,
+      badges: [],
+      founderSocial: FounderSocial(
+        linkedinUrl: 'https://linkedin.com/in/ana-rodriguez',
+        linkedinConnections: 245,
+        linkedinHeadline: 'Psicóloga + Emprendedora',
+        isLinkedinVerified: false,
+      ),
+      verifiedAt: DateTime.now().subtract(const Duration(days: 10)),
+    );
+
     return [
       Startup(
         id: 'startup1',
@@ -233,6 +329,10 @@ class CommunityService {
         currentFunding: 32500,
         membersCount: 156,
         createdAt: DateTime.now().subtract(const Duration(days: 90)),
+        investorsCount: 47,
+        daysRemaining: 23,
+        verification: finaHerVerification,
+        posts: finaHerPosts,
       ),
       Startup(
         id: 'startup2',
@@ -249,7 +349,21 @@ class CommunityService {
         currentFunding: 8750,
         membersCount: 89,
         createdAt: DateTime.now().subtract(const Duration(days: 45)),
+        investorsCount: 12,
+        daysRemaining: null,
+        verification: mindFlowVerification,
+        posts: mindFlowPosts,
       ),
     ];
+  }
+
+  /// Obtiene una startup específica por su ID
+  static Startup? getMockStartupById(String startupId) {
+    final startups = getMockStartups();
+    try {
+      return startups.firstWhere((startup) => startup.id == startupId);
+    } catch (e) {
+      return null;
+    }
   }
 }

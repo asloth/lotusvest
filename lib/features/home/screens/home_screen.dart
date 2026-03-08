@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/pitch_project.dart';
 import '../widgets/pitch_card.dart';
+import '../services/home_services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -221,13 +222,33 @@ class _HomeScreenState extends State<HomeScreen> {
           hintText: 'Search projects, founders...',
           hintStyle: const TextStyle(color: Colors.white38),
           prefixIcon: const Icon(Icons.search, color: Colors.white38),
-          suffixIcon: Container(
-            margin: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: _primaryColor.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(8),
+          suffixIcon: GestureDetector(
+            onTap: () async {
+              try {
+                await HomeService.uploadMockPitchProjects();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('✓ Proyectos subidos a Firebase'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('✗ Error: $e'),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              }
+            },
+            child: Container(
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: _primaryColor.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(Icons.tune, color: _primaryColor, size: 20),
             ),
-            child: const Icon(Icons.tune, color: _primaryColor, size: 20),
           ),
           filled: true,
           fillColor: _surfaceColor,

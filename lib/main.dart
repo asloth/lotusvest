@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'features/auth/screens/login_screen.dart';
 import 'features/auth/screens/signup_screen.dart';
 import 'features/auth/screens/interests_screen.dart';
@@ -8,7 +10,11 @@ import 'features/home/screens/home_screen.dart';
 import 'features/profile/screens/profile_screen.dart';
 import 'widgets/bottom_nav_bar.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const LotusVestApp());
 }
 

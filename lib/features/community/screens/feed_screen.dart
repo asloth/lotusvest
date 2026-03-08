@@ -5,14 +5,18 @@ import '../services/community_service.dart';
 import '../widgets/post_card.dart';
 
 class FeedScreen extends StatefulWidget {
-  const FeedScreen({super.key});
+  /// ID de la startup a mostrar
+  final String startupId;
+
+  const FeedScreen({super.key, this.startupId = 'startup1'});
 
   @override
   State<FeedScreen> createState() => _FeedScreenState();
 }
 
 class _FeedScreenState extends State<FeedScreen> {
-  final List<Post> _posts = CommunityService.getMockPostsByStartup('startup1');
+  late Startup _startup;
+  late List<Post> _posts;
   final ScrollController _scrollController = ScrollController();
 
   // Theme colors
@@ -20,6 +24,17 @@ class _FeedScreenState extends State<FeedScreen> {
   static const Color _backgroundColor = Color(0xFF121212);
   static const Color _surfaceColor = Color(0xFF1E1E1E);
   static const Color _verifiedColor = Color(0xFF34D399);
+
+  @override
+  void initState() {
+    super.initState();
+    // Cargar startup del servicio
+    _startup =
+        CommunityService.getMockStartupById(widget.startupId) ??
+        CommunityService.getMockStartups().first;
+    // Obtener posts desde la startup
+    _posts = _startup.posts;
+  }
 
   @override
   void dispose() {
@@ -116,10 +131,8 @@ class _FeedScreenState extends State<FeedScreen> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(color: _surfaceColor, width: 3),
-                    image: const DecorationImage(
-                      image: NetworkImage(
-                        'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200',
-                      ),
+                    image: DecorationImage(
+                      image: NetworkImage(_startup.founderPhotoUrl),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -133,9 +146,9 @@ class _FeedScreenState extends State<FeedScreen> {
                   children: [
                     Row(
                       children: [
-                        const Text(
-                          'FinaHer',
-                          style: TextStyle(
+                        Text(
+                          _startup.name,
+                          style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -146,9 +159,9 @@ class _FeedScreenState extends State<FeedScreen> {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'María González',
-                      style: TextStyle(
+                    Text(
+                      _startup.founderName,
+                      style: const TextStyle(
                         fontSize: 14,
                         color: Colors.white70,
                         fontWeight: FontWeight.w500,
@@ -166,9 +179,13 @@ class _FeedScreenState extends State<FeedScreen> {
           ),
           const SizedBox(height: 16),
           // Description
-          const Text(
-            'Plataforma fintech que democratiza el acceso a servicios financieros para mujeres emprendedoras en Latinoamérica. Ofrecemos microcréditos, educación financiera y herramientas de gestión.',
-            style: TextStyle(fontSize: 14, color: Colors.white70, height: 1.6),
+          Text(
+            _startup.description,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.white70,
+              height: 1.6,
+            ),
           ),
           const SizedBox(height: 16),
           // Stage badge
@@ -183,14 +200,18 @@ class _FeedScreenState extends State<FeedScreen> {
                   color: _primaryColor.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.rocket_launch, size: 14, color: _primaryColor),
-                    SizedBox(width: 6),
+                    const Icon(
+                      Icons.rocket_launch,
+                      size: 14,
+                      color: _primaryColor,
+                    ),
+                    const SizedBox(width: 6),
                     Text(
-                      'Pre-Seed',
-                      style: TextStyle(
+                      _startup.stage.toString().split('.').last.toUpperCase(),
+                      style: const TextStyle(
                         color: _primaryColor,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -209,14 +230,22 @@ class _FeedScreenState extends State<FeedScreen> {
                   color: const Color(0xFF60A5FA).withOpacity(0.15),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.category, size: 14, color: Color(0xFF60A5FA)),
-                    SizedBox(width: 6),
+                    const Icon(
+                      Icons.category,
+                      size: 14,
+                      color: Color(0xFF60A5FA),
+                    ),
+                    const SizedBox(width: 6),
                     Text(
-                      'Fintech',
-                      style: TextStyle(
+                      _startup.industry
+                          .toString()
+                          .split('.')
+                          .last
+                          .toUpperCase(),
+                      style: const TextStyle(
                         color: Color(0xFF60A5FA),
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -233,6 +262,13 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   Widget _buildVerifiedBadge() {
+    // Solo mostrar si la startup está completamente verificada
+    final isVerified = _startup.verification?.isFullyVerified ?? false;
+
+    if (!isVerified) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
@@ -258,10 +294,10 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   Widget _buildFundingProgress() {
-    const double goalAmount = 50000;
-    const double currentAmount = 32500;
-    const double progress = currentAmount / goalAmount;
-    const double remainingAmount = goalAmount - currentAmount;
+    final double goalAmount = _startup.fundingGoal;
+    final double currentAmount = _startup.currentFunding;
+    final double progress = currentAmount / goalAmount;
+    final double remainingAmount = goalAmount - currentAmount;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -362,17 +398,23 @@ class _FeedScreenState extends State<FeedScreen> {
             children: [
               const Icon(Icons.people_outline, size: 16, color: Colors.white54),
               const SizedBox(width: 6),
-              const Text(
-                '47 inversores',
-                style: TextStyle(color: Colors.white54, fontSize: 12),
+              Text(
+                '${_startup.investorsCount} inversores',
+                style: const TextStyle(color: Colors.white54, fontSize: 12),
               ),
               const SizedBox(width: 16),
               const Icon(Icons.access_time, size: 16, color: Colors.white54),
               const SizedBox(width: 6),
-              const Text(
-                '23 días restantes',
-                style: TextStyle(color: Colors.white54, fontSize: 12),
-              ),
+              if (_startup.daysRemaining != null)
+                Text(
+                  '${_startup.daysRemaining} días restantes',
+                  style: const TextStyle(color: Colors.white54, fontSize: 12),
+                )
+              else
+                const Text(
+                  'Campaña cerrada',
+                  style: TextStyle(color: Colors.white54, fontSize: 12),
+                ),
             ],
           ),
         ],
@@ -381,14 +423,6 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   Widget _buildTechStack() {
-    final technologies = [
-      {'name': 'Flutter', 'icon': '📱'},
-      {'name': 'Firebase', 'icon': '🔥'},
-      {'name': 'Python', 'icon': '🐍'},
-      {'name': 'AWS', 'icon': '☁️'},
-      {'name': 'Machine Learning', 'icon': '🤖'},
-    ];
-
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(20),
@@ -411,7 +445,7 @@ class _FeedScreenState extends State<FeedScreen> {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: technologies.map((tech) {
+            children: _startup.technologies.map((tech) {
               return Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,
@@ -425,10 +459,13 @@ class _FeedScreenState extends State<FeedScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(tech['icon']!, style: const TextStyle(fontSize: 14)),
+                    Text(
+                      _getTechEmoji(tech),
+                      style: const TextStyle(fontSize: 14),
+                    ),
                     const SizedBox(width: 6),
                     Text(
-                      tech['name']!,
+                      tech,
                       style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 12,
@@ -445,7 +482,50 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 
+  /// Retorna el emoji correspondiente a una tecnología
+  String _getTechEmoji(String techName) {
+    const Map<String, String> techEmojis = {
+      'Flutter': '📱',
+      'Firebase': '🔥',
+      'Python': '🐍',
+      'AWS': '☁️',
+      'Machine Learning': '🤖',
+      'React Native': '⚛️',
+      'Node.js': '🟢',
+      'ML': '🤖',
+      'IA': '🧠',
+    };
+    return techEmojis[techName] ?? '💻';
+  }
+
   Widget _buildTrustIndicators() {
+    final verification = _startup.verification;
+
+    // Definir items de verificación de forma estructurada
+    final verificationItems = [
+      {
+        'icon': Icons.verified_user,
+        'title': 'Identidad Verificada',
+        'verifiedText': 'Documentación revisada por LotusVest',
+        'unverifiedText': 'Pendiente de revisión',
+        'isVerified': verification?.isIdentityVerified ?? false,
+      },
+      {
+        'icon': Icons.business,
+        'title': 'Empresa Registrada',
+        'verifiedText': 'RFC y acta constitutiva validados',
+        'unverifiedText': 'Documentación no completada',
+        'isVerified': verification?.isRegisteredCompany ?? false,
+      },
+      {
+        'icon': Icons.account_balance,
+        'title': 'Due Diligence Completado',
+        'verifiedText': 'Revisión financiera aprobada',
+        'unverifiedText': 'Revisión financiera pendiente',
+        'isVerified': verification?.isDueDiligenceCompleted ?? false,
+      },
+    ];
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(20),
@@ -471,97 +551,112 @@ class _FeedScreenState extends State<FeedScreen> {
             ],
           ),
           const SizedBox(height: 16),
-          // Verification items
-          _buildTrustItem(
-            Icons.verified_user,
-            'Identidad Verificada',
-            'Documentación revisada por LotusVest',
-            _verifiedColor,
-          ),
-          const SizedBox(height: 12),
-          _buildTrustItem(
-            Icons.business,
-            'Empresa Registrada',
-            'RFC y acta constitutiva validados',
-            _verifiedColor,
-          ),
-          const SizedBox(height: 12),
-          _buildTrustItem(
-            Icons.account_balance,
-            'Due Diligence Completado',
-            'Revisión financiera aprobada',
-            _verifiedColor,
-          ),
+          // Verification items dinámicos
+          if (verification != null)
+            ...List.generate(verificationItems.length, (index) {
+              final item = verificationItems[index];
+              return Column(
+                children: [
+                  _buildTrustItem(
+                    item['icon'] as IconData,
+                    item['title'] as String,
+                    item['isVerified'] as bool
+                        ? item['verifiedText'] as String
+                        : item['unverifiedText'] as String,
+                    item['isVerified'] as bool
+                        ? _verifiedColor
+                        : Colors.white54,
+                    //isVerified: item['isVerified'] as bool,
+                  ),
+                  if (index < verificationItems.length - 1)
+                    const SizedBox(height: 12),
+                ],
+              );
+            }),
           const SizedBox(height: 16),
           const Divider(color: Colors.white12),
           const SizedBox(height: 16),
-          // LinkedIn connection
-          GestureDetector(
-            onTap: () => _launchLinkedIn(),
-            child: Container(
-              padding: const EdgeInsets.all(16),
+          // LinkedIn connection dinámico
+          if (verification?.founderSocial != null)
+            _buildLinkedInCard()
+          else
+            const Text(
+              'Información de LinkedIn no disponible',
+              style: TextStyle(color: Colors.white54, fontSize: 12),
+            ),
+          const SizedBox(height: 12),
+          // Endorsements/Badges dinámicos
+          if (verification?.badges.isNotEmpty ?? false)
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: verification!.badges.map((badge) {
+                return _buildEndorsementBadge(badge.emoji, badge.name);
+              }).toList(),
+            )
+          else
+            const Text(
+              'Sin badges aún',
+              style: TextStyle(color: Colors.white54, fontSize: 12),
+            ),
+        ],
+      ),
+    );
+  }
+
+  /// Construye tarjeta de LinkedIn dinámicamente
+  Widget _buildLinkedInCard() {
+    final social = _startup.verification?.founderSocial;
+    if (social == null) {
+      return const SizedBox.shrink();
+    }
+
+    return GestureDetector(
+      onTap: () => _launchLinkedIn(social.linkedinUrl),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0A66C2).withOpacity(0.15),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFF0A66C2).withOpacity(0.3)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
               decoration: BoxDecoration(
-                color: const Color(0xFF0A66C2).withOpacity(0.15),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: const Color(0xFF0A66C2).withOpacity(0.3),
-                ),
+                color: const Color(0xFF0A66C2),
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: Row(
+              child: const Icon(Icons.link, color: Colors.white, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF0A66C2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.link,
+                  Text(
+                    'LinkedIn de ${_startup.founderName}',
+                    style: const TextStyle(
                       color: Colors.white,
-                      size: 24,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'LinkedIn de María González',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          '+500 conexiones • Ex-Goldman Sachs',
-                          style: TextStyle(color: Colors.white54, fontSize: 12),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Icon(
-                    Icons.open_in_new,
-                    color: Color(0xFF0A66C2),
-                    size: 20,
+                  const SizedBox(height: 4),
+                  Text(
+                    '+${social.linkedinConnections} conexiones'
+                    '${social.linkedinHeadline != null ? ' • ${social.linkedinHeadline}' : ''}'
+                    '${social.isLinkedinVerified ? ' ✓' : ''}',
+                    style: const TextStyle(color: Colors.white54, fontSize: 12),
                   ),
                 ],
               ),
             ),
-          ),
-          const SizedBox(height: 12),
-          // Endorsements
-          Row(
-            children: [
-              _buildEndorsementBadge('🏆', 'Top 10 Startups 2024'),
-              const SizedBox(width: 8),
-              _buildEndorsementBadge('🎓', 'Y Combinator Aplicante'),
-            ],
-          ),
-        ],
+            const Icon(Icons.open_in_new, color: Color(0xFF0A66C2), size: 20),
+          ],
+        ),
       ),
     );
   }
@@ -668,12 +763,10 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 
-  Future<void> _launchLinkedIn() async {
-    final Uri url = Uri.parse(
-      'https://www.linkedin.com/in/maria-gonzalez-finaher',
-    );
+  Future<void> _launchLinkedIn(String url) async {
+    final Uri linkedinUrl = Uri.parse(url);
     try {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
+      await launchUrl(linkedinUrl, mode: LaunchMode.externalApplication);
     } catch (e) {
       // Handle error silently
     }
