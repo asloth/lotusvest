@@ -23,7 +23,7 @@ class _SignupScreenState extends State<SignupScreen> {
     await Future.delayed(const Duration(milliseconds: 800));
     if (!mounted) return;
     setState(() => _isLoading = false);
-    Navigator.of(context).pushReplacementNamed('/home');
+    Navigator.of(context).pushReplacementNamed('/onboarding');
   }
 
   void _handleGoogleSignup() async {
@@ -31,7 +31,7 @@ class _SignupScreenState extends State<SignupScreen> {
     await Future.delayed(const Duration(milliseconds: 800));
     if (!mounted) return;
     setState(() => _isLoading = false);
-    Navigator.of(context).pushReplacementNamed('/home');
+    Navigator.of(context).pushReplacementNamed('/onboarding');
   }
 
   void _handleLinkedInSignup() async {
@@ -39,7 +39,7 @@ class _SignupScreenState extends State<SignupScreen> {
     await Future.delayed(const Duration(milliseconds: 800));
     if (!mounted) return;
     setState(() => _isLoading = false);
-    Navigator.of(context).pushReplacementNamed('/home');
+    Navigator.of(context).pushReplacementNamed('/onboarding');
   }
 
   @override
