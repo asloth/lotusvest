@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'recommended_projects_screen.dart';
 
 class InterestsScreen extends StatefulWidget {
   const InterestsScreen({super.key});
@@ -8,7 +9,6 @@ class InterestsScreen extends StatefulWidget {
 }
 
 class _InterestsScreenState extends State<InterestsScreen> {
-  static const _lavender = Color(0xFFA78BFA);
   static const _maxSelection = 4;
 
   final Set<int> _selected = {};
@@ -39,7 +39,16 @@ class _InterestsScreenState extends State<InterestsScreen> {
   }
 
   void _handleContinue() {
-    Navigator.of(context).pushReplacementNamed('/home');
+    final selectedLabels = _selected
+        .map((i) => _interests[i].label)
+        .toList();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => RecommendedProjectsScreen(
+          selectedInterests: selectedLabels,
+        ),
+      ),
+    );
   }
 
   @override
